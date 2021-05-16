@@ -1,14 +1,35 @@
 
 cd app
-
 node ./node_modules/db-migrate/bin/db-migrate create migration --config=config/database.json
-
 node ./node_modules/db-migrate/bin/db-migrate up --config=config/database.json
 
 
+Отправить одну точку
 curl http://localhost/api/traffic/v1/probedata -H "Content-Type:application/json" -X POST -d '{"provider":"STARLINE_EU_PB","pp":[{"id":"1","x":-76.9906933605,"y":38.9910785259,"s":51,"h":104,"t":"2020-03-04T11:19:00"}]}'
-curl http://localhost:3000/api/traffic/v1/probedata -H "Content-Type:application/json" -X POST -d @app/mock/test1.json -w "\n%{time_total}\n"
+
+Отправить все точки из файла app/mock/test1.json (Санкт-Петербург)
+curl http://localhost/api/traffic/v1/probedata -H "Content-Type:application/json" -X POST -d @app/mock/test1.json -w "\n%{time_total}\n"
+
+Добавить Область для фильтра Спб (большая)
+curl http://localhost/api/traffic/v1/area -H "Content-Type:application/json" -X POST -d@app/mock/area1.json
+
+Омск (средняя)
+curl http://localhost/api/traffic/v1/area -H "Content-Type:application/json" -X POST -d@app/mock/area2.json
+
+Владивосток (маленькая)
+curl http://localhost/api/traffic/v1/area -H "Content-Type:application/json" -X POST -d@app/mock/area3.json
 
 
-curl http://localhost:3000/api/traffic/v1/area -H "Content-Type:application/json" -X POST -d@app/mock/area1.json
-curl http://localhost:3000/api/traffic/v1/area/5 -H "Content-Type:application/json" -X DELETE
+Удалить область с ИД 5
+curl http://localhost/api/traffic/v1/area/5 -H "Content-Type:application/json" -X DELETE
+
+Список всех областей
+curl http://localhost/api/traffic/v1/area
+
+
+Загрузить/перезагрузить ВСЕ области для фильтрации в память апстрим процессов
+Вызвать несколько раз, убедится что запрос попал на все 4-5 апстримов смотря в респонс
+Все буфферезированные точки в апстриме сбрасываются
+
+curl http://localhost/api/traffic/v1/area/reload
+{"port":"3001","status":"success","total":31}%                                                                                                                                                                                                 mihailkuzin@MacBook-Pro-Mihail vdtsl % curl http://localhost/api/traffic/v1/area/reload
