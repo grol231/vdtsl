@@ -1,3 +1,4 @@
 logs
-app\out\*
-app\node_modules
+app/out/*
+app/node_modules
+.idea

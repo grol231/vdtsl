@@ -1,0 +1,57 @@
+version: '3.4'
+services:
+
+    postgres-vdtsl:
+        build:
+            context: ./
+            dockerfile: docker/postgres/Dockerfile
+        ports:
+            - 5439:5432
+        volumes:
+            - ./docker/postgres/init/:/docker-entrypoint-initdb.d/
+            - ./docker/postgres/import/:/csv-import/
+            - ./docker/postgres/command/:/command/
+        networks:
+            - default
+
+    node-vdtsl:
+        build:
+            context: ./
+            dockerfile: docker/node/Dockerfile
+        ports:
+            - 3000:3000
+            - 3001:3001
+            - 3002:3002
+            - 3003:3003
+            - 3004:3004
+            - 9229:9229
+        volumes:
+            - ./app:/usr/src/app
+            - /usr/app/node_modules
+            - ./logs/supervisor:/var/log/supervisor
+        depends_on:
+            - postgres-vdtsl
+        networks:
+            - default
+
+    nginx-vdtsl:
+        build:
+            context: ./
+            dockerfile: ./docker/nginx/Dockerfile
+        depends_on:
+            - node-vdtsl
+        ports:
+            - 80:80
+        volumes:
+            - ./logs/nginx:/var/log/nginx
+            - ./app/web:/var/www/apps:delegated
+            - ./docker/nginx/:/etc/nginx/debug/
+        networks:
+            - default
+
+volumes:
+    db-data-vdtsl:
+        driver: local
+
+networks:
+    default:

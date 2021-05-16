@@ -1,0 +1,1 @@
+CREATE DATABASE vdtsl; CREATE USER vdtsl with encrypted password 'vdtsl123';GRANT ALL PRIVILEGES ON DATABASE vdtsl TO vdtsl;
