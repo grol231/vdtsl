@@ -27,7 +27,6 @@ services:
             - 9229:9229
         volumes:
             - ./app:/usr/src/app
-            - /usr/app/node_modules
             - ./logs/supervisor:/var/log/supervisor
         depends_on:
             - postgres-vdtsl
