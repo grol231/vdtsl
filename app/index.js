@@ -66,14 +66,16 @@ app.post('/api/traffic/v1/probedata', (req, res) => {
         })
     });
 
-    areas.forEach(function(area){
-        if(points[area.id].length > 1000) {
-            points[area.id].forEach(function (point) {
-                handlers[area.id].write([point.id, point.t, point.x, point.y, point.s, point.h].join(',')+'\n')
-            });
-            points[area.id] = [];
-        };
-    });
+    if(total > 0){
+        areas.forEach(function(area){
+            if(points[area.id].length > 1000) {
+                points[area.id].forEach(function (point) {
+                    handlers[area.id].write([point.id, point.t, point.x, point.y, point.s, point.h].join(',')+'\n')
+                });
+                points[area.id] = [];
+            }
+        })
+    }
 
     if (logHour != (new Date()).getHours()) {
         reopenStreams(false)
