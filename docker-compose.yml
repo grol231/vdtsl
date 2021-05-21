@@ -36,7 +36,7 @@ services:
             - default
 
     nginx-vdtsl:
-        image: kuzinmv83/vdtsl-ndginx-repo:latest
+        image: kuzinmv83/vdtsl-nginx-repo:latest
         build:
             context: ./
             dockerfile: ./docker/nginx/Dockerfile
