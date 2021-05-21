@@ -2,6 +2,7 @@ version: '3.4'
 services:
 
     postgres-vdtsl:
+        image: kuzinmv83/vdtsl-postgresql-repo:latest
         build:
             context: ./
             dockerfile: docker/postgres/Dockerfile
@@ -15,6 +16,7 @@ services:
             - default
 
     node-vdtsl:
+        image: kuzinmv83/vdtsl-node-repo:latest
         build:
             context: ./
             dockerfile: docker/node/Dockerfile
@@ -34,6 +36,7 @@ services:
             - default
 
     nginx-vdtsl:
+        image: kuzinmv83/vdtsl-ndginx-repo:latest
         build:
             context: ./
             dockerfile: ./docker/nginx/Dockerfile
